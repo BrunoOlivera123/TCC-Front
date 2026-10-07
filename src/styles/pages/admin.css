@@ -1,0 +1,147 @@
+/* ---------- Painel administrativo ---------- */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: var(--shadow-sm);
+}
+.stat-numero {
+  font-family: var(--fonte-titulo);
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--primary);
+}
+.stat-rotulo {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+}
+
+.cartao-cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.cartao-cabecalho h2 {
+  margin: 0;
+}
+.admin-filtro {
+  font: inherit;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--text-primary);
+  transition: border-color var(--dur) ease;
+}
+.admin-filtro:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+.tabela-caixa {
+  overflow-x: auto;
+}
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+.tabela th,
+.tabela td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.tabela th {
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.tabela tbody tr {
+  transition: background-color var(--dur) ease;
+}
+.tabela tbody tr:hover {
+  background: var(--background-secondary);
+}
+.tabela tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.lista-categorias {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.item-categoria {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 13.5px;
+}
+.categoria-nome {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.categoria-input {
+  font: inherit;
+  flex: 1;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--text-primary);
+  transition: border-color var(--dur) ease;
+}
+.categoria-input:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+.botao-pequeno {
+  padding: 6px 12px;
+  font-size: 12.5px;
+  border-radius: 8px;
+}
+
+/* Botão "Atualizar" (ícone + texto): um pouco maior que .botao-pequeno
+   genérico para não ficar minúsculo/deslocado, com o ícone girando
+   suavemente enquanto a atualização está em andamento. */
+.botao-atualizar {
+  padding: 8px 14px;
+  font-size: 13px;
+  gap: 8px;
+}
+.botao-atualizar svg {
+  width: 15px;
+  height: 15px;
+  transition: transform var(--dur) ease;
+}
+.botao-atualizar.carregando svg {
+  animation: girar 800ms linear infinite;
+}
+@keyframes girar {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+

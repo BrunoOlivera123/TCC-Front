@@ -1,0 +1,185 @@
+/* Em telas estreitas (celular), os itens de lista empilham em vez de
+   ficar lado a lado, para não espremer o botão "Aceitar". */
+@media (max-width: 480px) {
+  .topo {
+    padding: 10px 16px;
+  }
+  .marca {
+    font-size: 17px;
+  }
+  .marca-icone {
+    width: 76px;
+    height: 46px;
+  }
+  .topo-acoes {
+    gap: 6px;
+  }
+  .topo-acoes .botao-secundario {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+  .conteudo {
+    padding: 20px 14px 48px;
+  }
+  .conteudo-auth {
+    padding-top: 28px;
+    padding-bottom: 48px;
+  }
+  .auth-layout {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+  .auth-intro h1 {
+    font-size: 24px;
+  }
+  .auth-logo {
+    width: min(100%, 340px);
+    height: 158px;
+    margin-bottom: 16px;
+  }
+  .cartao {
+    padding: 18px;
+  }
+  .item-chamado,
+  .item-historico {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .toast-container {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    align-items: stretch;
+    max-width: none;
+  }
+}
+
+/* Tablets: a coluna do formulário de auth ainda cabe ao lado da
+   introdução, só um pouco mais estreita — evita que o cartão de
+   login/cadastro fique espremido antes de cair para 1 coluna em
+   telas de celular (regra acima, max-width: 480px). */
+@media (min-width: 481px) and (max-width: 900px) {
+  .auth-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+    gap: 28px;
+  }
+}
+
+/* ---------- Tela de carregamento (splash inicial) ---------- */
+.tela-carregamento {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: var(--background);
+}
+.spinner {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  animation: girar 0.7s linear infinite;
+}
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Largura um pouco mais estreita que ".conteudo", para telas de um
+   único cartão de formulário (esqueci senha, redefinir senha,
+   configurações, páginas institucionais) — fica mais confortável de
+   ler do que a largura de "painel" usada no cliente/prestador. */
+.conteudo-estreito {
+  max-width: 560px;
+  width: 100%;
+}
+
+#tela-admin .cartao,
+#tela-sobre .cartao,
+#tela-ajuda .cartao,
+#tela-termos .cartao,
+#tela-privacidade .cartao,
+#tela-configuracoes .cartao {
+  min-height: 420px;
+  padding: 28px 30px;
+}
+
+#tela-admin .cartao h2,
+#tela-sobre .cartao h2,
+#tela-ajuda .cartao h2,
+#tela-termos .cartao h2,
+#tela-privacidade .cartao h2,
+#tela-configuracoes .cartao h2 {
+  font-size: clamp(1.1rem, 1.6vw, 1.7rem);
+}
+
+#tela-esqueci-senha .cartao,
+#tela-redefinir-senha .cartao {
+  min-height: auto;
+  padding: 28px 30px;
+}
+
+#tela-esqueci-senha .cartao h2,
+#tela-redefinir-senha .cartao h2 {
+  font-size: clamp(1.7rem, 2.2vw, 2.1rem);
+}
+
+#tela-esqueci-senha .formulario,
+#tela-redefinir-senha .formulario {
+  gap: 18px;
+}
+
+#tela-esqueci-senha .subtitulo,
+#tela-redefinir-senha .subtitulo {
+  margin-bottom: 18px;
+}
+
+#tela-esqueci-senha .btn-voltar,
+#tela-redefinir-senha .btn-voltar {
+  margin-top: 12px;
+}
+
+.botao-link {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+  padding: 0;
+  transition: color var(--dur) ease;
+}
+.botao-link:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+.mensagem-sucesso {
+  background: var(--success-soft);
+  color: var(--success);
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  margin-bottom: 12px;
+}
+
+#tela-esqueci-senha .btn-voltar {
+  margin-top: 8px;
+}
+
+/* Utilitário genérico de "pilha vertical com espaçamento" — mesma
+   fórmula de ".tela", usado para blocos que não são telas de topo (ex.:
+   o conteúdo do painel admin depois do login). */
+.pilha {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+

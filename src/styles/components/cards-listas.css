@@ -1,0 +1,337 @@
+/* Padrão único do "Olá, nome" em todas as telas logadas (cliente,
+   prestador, admin): mesmo tamanho, peso, cor e margem — ver seção
+   "Cabeçalho e nome do usuário" do pedido de ajustes visuais. */
+.saudacao h1,
+.cliente-cabecalho h1,
+.dash-saudacao h1 {
+  margin: 0 0 4px 0;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.saudacao .subtitulo,
+.cliente-cabecalho .subtitulo,
+.dash-saudacao .subtitulo {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* ---------- Progresso do chamado (trilha "Aberto -> Aceito -> A caminho -> Concluído") ----------
+   Truque de CSS: "counter-reset"/"counter-increment"/"content: counter(...)"
+   numera os <li> automaticamente (1, 2, 3, 4) sem precisar escrever o
+   número no HTML nem em JS — o próprio CSS conta. Uma linha conectando
+   os círculos (::after) reforça a ideia de trilha/etapas percorridas.
+   Azul-claro marca as etapas já concluídas; amarelo destaca a etapa
+   atual, chamando a atenção para onde o atendimento está agora. */
+.progresso {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 0;
+  padding: 0;
+  margin: 4px 0 20px;
+  counter-reset: passo;
+}
+.progresso li {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  position: relative;
+  padding-top: 34px; /* abre espaço para o "círculo numerado" (::before) encaixar acima do texto */
+  overflow-wrap: anywhere;
+}
+.progresso li::before {
+  counter-increment: passo;
+  content: counter(passo);
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%); /* centraliza o círculo horizontalmente sobre o texto */
+  z-index: 2;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--border);
+  color: var(--surface);
+  font-weight: 700;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--dur) ease, box-shadow var(--dur) ease;
+}
+/* Linha conectando o centro de um círculo ao próximo, atrás deles (z-index menor). */
+.progresso li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  top: 11px;
+  left: calc(50% + 12px);
+  width: calc(100% - 24px);
+  height: 2px;
+  background: var(--border);
+  transition: background-color var(--dur) ease;
+}
+/* Classes alternadas via JS (app.js) conforme o status do chamado. */
+.progresso li.concluido::before {
+  background: var(--primary);
+  color: #fff;
+}
+.progresso li.concluido:not(:last-child)::after {
+  background: var(--primary);
+}
+.progresso li.atual {
+  color: var(--text-primary);
+}
+.progresso li.atual::before {
+  background: var(--accent-hover);
+  color: #ffffff;
+  box-shadow: 0 0 0 4px var(--accent-soft); /* "auréola" destacando a etapa atual */
+}
+.progresso li.cancelado::before {
+  content: '×'; /* substitui o número pelo "x" quando o chamado foi cancelado */
+  background: var(--error);
+  color: #fff;
+}
+
+/* Lista de detalhes tipo "ficha" (rótulo à esquerda, valor à direita),
+   usada tanto no card do cliente quanto no do prestador. */
+.detalhes {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px 0;
+  margin: 0 0 16px;
+  font-size: 14px;
+  min-width: 0;
+}
+.detalhes dt {
+  color: var(--text-secondary);
+  font-weight: 700;
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.3;
+}
+.detalhes dd {
+  margin: 0 0 8px;
+  color: var(--text-primary);
+  font-size: 15px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.detalhes dd:last-of-type {
+  margin-bottom: 0;
+}
+
+.bloco-avaliacao {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.modal-avaliacao-conteudo {
+  width: min(92vw, 560px);
+  max-width: 560px;
+  padding: 26px 24px 20px;
+}
+.modal-avaliacao-conteudo h2 {
+  margin: 0 0 18px;
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  color: var(--text-primary);
+}
+.modal-avaliacao-conteudo .formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.modal-avaliacao-conteudo .estrelas {
+  justify-content: flex-start;
+  margin-bottom: 4px;
+}
+.modal-avaliacao-conteudo textarea {
+  min-height: 110px;
+}
+.modal-avaliacao-conteudo .botao-primario {
+  width: 100%;
+}
+.estrelas {
+  display: flex;
+  gap: 4px;
+  font-size: 26px;
+}
+.estrela {
+  cursor: pointer;
+  color: var(--border); /* estrela "apagada" por padrão */
+  transition: color 120ms ease, transform 120ms ease;
+}
+.estrela:hover {
+  transform: scale(1.08);
+}
+.estrela.ativa {
+  color: var(--accent); /* marcada via JS conforme o clique do usuário */
+}
+
+/* ---------- Disponibilidade do prestador (interruptor liga/desliga) ----------
+   Truque de CSS: o <input type="checkbox"> real fica escondido
+   (display:none); o visual do interruptor é feito com a "trilha"
+   (span.interruptor-trilho) e sua "bolinha" (::after). Quando o
+   checkbox está marcado, o seletor "input:checked + .interruptor-trilho"
+   muda a cor de fundo e desloca a bolinha para a direita. */
+.cartao-disponibilidade {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.interruptor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.interruptor input {
+  display: none;
+}
+.interruptor-trilho {
+  width: 44px;
+  height: 24px;
+  background: var(--border);
+  border-radius: 999px;
+  position: relative;
+  transition: background var(--dur) ease;
+  flex: none;
+}
+.interruptor-trilho::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur) ease; /* anima o deslize da bolinha */
+}
+.interruptor input:checked + .interruptor-trilho {
+  background: var(--success);
+}
+.interruptor input:checked + .interruptor-trilho::after {
+  transform: translateX(20px); /* desliza a bolinha para a direita quando "ligado" */
+}
+
+/* ---------- Listas (chamados disponíveis e histórico) ---------- */
+.lista-chamados,
+.lista-historico {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.item-chamado,
+.item-historico {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  font-size: 13.5px;
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--dur) ease, box-shadow var(--dur) ease, transform var(--dur) ease;
+}
+.item-historico > div {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+}
+.item-historico strong,
+.item-historico .texto-auxiliar {
+  display: block;
+  width: 100%;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.avaliacao-comentario {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.item-chamado:hover {
+  border-color: var(--primary-light);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+.item-chamado-info strong {
+  display: block;
+  font-size: 14.5px;
+  color: var(--text-primary);
+}
+
+/* "Selo" (badge) de status no histórico — cor muda conforme o status.
+   O amarelo é a cor padrão do selo (status em andamento), reservando o
+   destaque para o que ainda precisa de atenção; verde e vermelho
+   marcam os estados finais (concluído/cancelado). */
+.selo {
+  display: inline-block;
+  flex: none;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 7px;
+  background: var(--accent-soft);
+  color: var(--accent-hover);
+  white-space: nowrap;
+}
+.selo-cancelado {
+  background: var(--error-soft);
+  color: var(--error);
+}
+.selo-concluido {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+/* Estado vazio (ex.: "nenhum chamado disponível", "nada por aqui ainda") */
+.estado-vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  padding: 30px 12px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin: 0;
+}
+.estado-vazio-icone {
+  width: 32px;
+  height: 32px;
+  opacity: 0.55;
+}
+
+.acoes {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.rodape {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 12px;
+  padding: 24px 20px;
+}
+

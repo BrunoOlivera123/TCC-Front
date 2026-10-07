@@ -1,0 +1,245 @@
+/* ---------- Segmentado (as "abas" cliente/prestador, entrar/cadastrar) ---------- */
+.segmentado {
+  display: flex;
+  background: var(--background-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px; /* curva sutil, sem virar "pílula" */
+  padding: 4px;
+  margin: 4px 0 10px;
+  gap: 4px;
+}
+.segmentado-secundario {
+  margin-bottom: 22px;
+}
+.segmentado-opcao {
+  flex: 1; /* os botões dividem o espaço igualmente */
+  border: none;
+  background: transparent;
+  padding: 9px 12px;
+  border-radius: 9px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: background-color var(--dur) ease, color var(--dur) ease, box-shadow var(--dur) ease, transform var(--dur) ease, flex-grow var(--dur) ease;
+  transform-origin: center;
+}
+.segmentado-opcao:not(.ativo) {
+  transform: scaleX(0.985);
+}
+/* Classe alternada via JS (app.js) para marcar qual opção está ativa. */
+.segmentado-opcao.ativo {
+  background: var(--primary);
+  color: #ffffff;
+  box-shadow: var(--shadow-sm);
+  transform: scaleX(1.04);
+  flex-grow: 1.08;
+}
+
+/* ---------- Formulários ---------- */
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.formulario label {
+  display: flex;
+  flex-direction: column; /* rótulo em cima, campo embaixo */
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+/* Envolve o texto do rótulo (e o "(opcional)", quando houver) num único
+   item flex de altura fixa. Sem isso, "Telefone" e "(opcional)" viravam
+   dois itens empilhados dentro do label (flex-direction:column trata
+   cada filho, incluindo nós de texto, como um item separado), deixando
+   o rótulo com 2 linhas contra 1 do campo vizinho (ex.: CPF) — e por
+   isso os inputs da mesma .formulario-linha ficavam em alturas
+   diferentes. */
+.rotulo-campo {
+  display: block;
+  min-height: 17px;
+  line-height: 17px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.opcional {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+.formulario input,
+.formulario select,
+.formulario textarea {
+  font: inherit; /* herda a fonte do body, em vez da fonte padrão "de sistema" dos formulários */
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--dur) ease, box-shadow var(--dur) ease;
+}
+.campo-senha {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.campo-senha input {
+  width: 100%;
+  padding-right: 46px;
+}
+.botao-olho {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 6px;
+  transition: color var(--dur) ease, background-color var(--dur) ease;
+}
+.icone-olho {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+.traço-olho {
+  stroke-linecap: round;
+  opacity: 1;
+  transition: opacity var(--dur) ease;
+}
+.botao-olho:hover {
+  color: var(--primary);
+  background: rgba(255, 255, 255, 0.02);
+}
+.botao-olho[data-visivel="true"] .traço-olho {
+  opacity: 0;
+}
+.botao-olho[data-visivel="false"] .traço-olho {
+  opacity: 1;
+}
+.formulario input:focus,
+.formulario select:focus,
+.formulario textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+  outline: none;
+}
+.formulario textarea {
+  resize: vertical; /* usuário só pode redimensionar para cima/baixo, não estica o layout na horizontal */
+}
+
+.botao-primario,
+.botao-secundario,
+.botao-perigo {
+  font: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 11px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  will-change: transform, box-shadow;
+  transition: background-color var(--dur) ease, border-color var(--dur) ease,
+    color var(--dur) ease, opacity var(--dur) ease, box-shadow var(--dur) ease,
+    transform 120ms ease;
+}
+@keyframes clique-botao {
+  0% { transform: scale(1); }
+  30% { transform: scale(0.97); }
+  60% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+.botao-primario.botao-clique,
+.botao-secundario.botao-clique,
+.botao-perigo.botao-clique {
+  animation: clique-botao 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.botao-com-icone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.botao-primario svg,
+.botao-secundario svg,
+.botao-perigo svg {
+  width: 17px;
+  height: 17px;
+  flex: none;
+}
+.botao-primario {
+  background: var(--primary);
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.26);
+}
+.botao-primario:hover {
+  background: var(--primary-dark);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.34);
+  transform: translateY(-1px);
+}
+.botao-primario:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.28);
+}
+.botao-primario:disabled,
+.botao-secundario:disabled,
+.botao-perigo:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+.botao-secundario {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+.botao-secundario:hover {
+  background: var(--primary-soft);
+  border-color: var(--primary-light);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+.botao-secundario:active {
+  transform: translateY(0) scale(0.98);
+}
+.botao-perigo {
+  background: var(--error-soft);
+  color: var(--error);
+  border-color: var(--error);
+}
+.botao-perigo:hover {
+  background: var(--error);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+.botao-perigo:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.mensagem-erro {
+  background: var(--error-soft);
+  color: var(--error);
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 13.5px;
+}
+
+.texto-auxiliar {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+}
+

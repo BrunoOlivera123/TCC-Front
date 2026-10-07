@@ -1,0 +1,117 @@
+/* ================================================================
+   DASHBOARD DO CLIENTE — Layout horizontal (grid principal + lateral)
+   Mantém IDs e lógica originais; só reorganiza a disposição visual
+   para aproveitar a largura da tela em vez de empilhar tudo.
+================================================================ */
+
+.cliente-cabecalho {
+  width: min(100%, 1280px);
+  margin: 0 auto 12px;
+  padding: 18px 0 10px;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+}
+
+.cliente-grid {
+  width: min(100%, 1280px);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(280px, 1fr);
+  gap: 20px;
+  align-items: stretch;
+}
+
+.cliente-principal,
+.cliente-lateral {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.cliente-principal > .cartao,
+.cliente-lateral > .cartao,
+.cartao-historico-mapa {
+  height: 100%;
+}
+
+.cartao-historico-mapa {
+  display: flex;
+  flex-direction: column;
+  max-height: 72vh;
+  overflow: hidden;
+}
+
+/* Histórico + Localização dividem um único cartão (uma borda externa só);
+   o divisor abaixo é a única separação visual entre as duas seções. */
+.cartao-historico-mapa h2 + .lista-historico,
+.cartao-historico-mapa h2:first-of-type {
+  margin-top: 0;
+}
+.cartao-historico-mapa .lista-historico {
+  max-height: 230px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-shrink: 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.cartao-historico-mapa .lista-historico::-webkit-scrollbar {
+  display: none;
+}
+.divisor-cartao {
+  height: 1px;
+  background: var(--border);
+  margin: 18px 0;
+  flex-shrink: 0;
+}
+.cartao-historico-mapa .mapa-caixa-lateral {
+  margin-bottom: 0;
+  flex: 1;
+  min-height: 220px;
+  max-height: 260px;
+}
+/* Enquanto não há chamado ativo, o Leaflet ainda não populou a div (ela
+   fica sem filhos) — mostra um aviso simples nesse estado. Assim que o
+   mapa é criado (renderizarChamadoCliente -> Mapa.criarOuAtualizar), a
+   div ganha filhos e ":empty" deixa de bater, escondendo o aviso sem
+   precisar de nenhuma lógica extra em JS. */
+.mapa-caixa-lateral:empty::before {
+  content: "Sem chamado ativo no momento.";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0 20px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* Linha horizontal dentro de formulários: pares de campos lado a lado
+   em vez de empilhados, aproveitando a largura do card. */
+.formulario-linha {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: start; /* CPF/Telefone (e os demais pares) começam sempre na mesma altura */
+}
+
+.formulario-linha-botoes {
+  align-items: stretch;
+}
+
+.formulario-linha-botoes .botao-secundario {
+  width: 100%;
+  justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .cliente-grid {
+    grid-template-columns: 1fr;
+  }
+  .formulario-linha {
+    grid-template-columns: 1fr;
+  }
+}
+

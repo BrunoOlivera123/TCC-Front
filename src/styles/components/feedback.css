@@ -1,0 +1,95 @@
+/* ---------- Notificações (toast), substituem alert() nativo ---------- */
+.toast-container {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  /* Acima dos modais (o do atendimento do prestador cobre a tela): sem isso os
+     avisos e erros ficavam escondidos atrás do fundo escuro. */
+  z-index: 2147483647;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+  gap: 10px;
+  max-width: min(360px, calc(100vw - 32px));
+}
+.toast {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--primary);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 13.5px;
+  box-shadow: var(--shadow-md);
+  animation: toast-entrada 220ms ease;
+}
+.toast-erro {
+  border-left-color: var(--error);
+}
+.toast-sucesso {
+  border-left-color: var(--success);
+}
+@keyframes toast-entrada {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Modal de confirmação, substitui confirm() nativo ---------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 2000;
+  animation: modal-fundo-entrada 180ms ease;
+}
+@keyframes modal-fundo-entrada {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.modal-conteudo {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  max-width: 360px;
+  width: 100%;
+  box-shadow: var(--shadow-xl);
+  animation: modal-entrada 220ms ease;
+}
+@keyframes modal-entrada {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.modal-chamado-conteudo {
+  max-width: 480px;
+}
+.modal-chamado-conteudo .detalhes {
+  margin-top: 18px;
+}
+.modal-conteudo p {
+  margin: 0 0 20px;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+.modal-acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+

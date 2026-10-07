@@ -1,0 +1,213 @@
+/* ---------- Topo (barra fixa com logo, tema e botão sair) ---------- */
+.topo {
+  position: sticky; /* acompanha a rolagem, fica sempre visível no topo */
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--fonte-titulo);
+  font-size: 19px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--text-primary);
+}
+.marca-icone {
+  display: block;
+  flex: none;
+  width: 92px;
+  height: 54px;
+  object-fit: contain;
+  object-position: center;
+}
+.marca-nome strong {
+  color: var(--primary);
+}
+.topo-acoes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.botao-icone {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--dur) ease, border-color var(--dur) ease, transform 150ms ease;
+}
+.botao-icone:hover {
+  border-color: var(--primary-light);
+  color: var(--primary);
+  transform: translateY(-1px);
+}
+.botao-icone:active {
+  transform: scale(0.94);
+}
+.botao-icone svg {
+  width: 18px;
+  height: 18px;
+}
+/* Contorno visível ao navegar por teclado (Tab), sem aparecer no clique
+   do mouse — acessibilidade básica para quem não usa mouse/touch. */
+.botao-icone:focus-visible,
+.formulario input:focus-visible,
+.formulario select:focus-visible,
+.formulario textarea:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ---------- Layout geral (largura máxima central, tipo "coluna de app") ---------- */
+.conteudo {
+  max-width: 1360px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 28px 18px 60px;
+}
+
+/* Telas fora do <main> ocupam todo o espaço livre entre topo e rodapé.
+   Telas auxiliares (Sobre, Ajuda, Termos, Privacidade, Config, Admin,
+   Esqueci/Redefinir senha) centralizam o card nesse espaço: "margin: auto"
+   centraliza quando sobra espaço e, quando o conteúdo é maior, vira
+   rolagem normal (nunca corta). Horizontal segue centralizado. Não usa
+   vh, então respeita o zoom do <html> e qualquer sidebar futura. */
+body > .tela:not(.oculta) {
+  flex: 1 0 auto;
+}
+.tela-aux > .conteudo {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-block: 28px;
+}
+.tela-aux > .conteudo > * {
+  width: min(100%, 560px);
+  margin-block: auto;
+}
+#admin-login { max-width: 440px; width: 100%; margin-inline: auto; }
+
+/* Cada tela organiza seus próprios cartões em coluna, com espaçamento
+   consistente entre eles — independe de estar dentro de <main> ou ser
+   uma <section> isolada (caso da tela de auth e de configurações). */
+.tela {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cartao {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--dur) ease;
+}
+.cartao h2 {
+  margin-top: 0;
+}
+
+.subtitulo {
+  color: var(--text-secondary);
+  margin-top: 0;
+}
+
+/* ---------- Tela de autenticação: intro + cartão lado a lado em telas largas ----------
+   O fundo (grade de pontos + luz suave) agora é global: ver "Fundo padrão" no fim deste arquivo. */
+#tela-auth {
+  position: relative;
+  overflow: hidden;
+}
+.conteudo-auth {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+  max-width: 1240px;
+  padding-top: 56px;
+  padding-bottom: 72px;
+}
+.auth-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(400px, 480px);
+  /* "start" (não "center"): a coluna da logo não pode subir/descer quando
+     o formulário à direita muda de altura (login <-> cadastro). Ver seção
+     "Login/cadastro — logo fixa" do pedido de ajustes visuais. */
+  align-items: center;
+  margin-block: auto;
+  gap: clamp(36px, 8vw, 120px);
+}
+.auth-intro {
+  /* Compensa visualmente o "start" acima, mas com um valor fixo — nunca
+     depende da altura do cartao-auth ao lado. */
+  padding-top: 0;
+}
+.auth-logo {
+  display: block;
+  width: min(100%, 420px);
+  height: 195px;
+  object-fit: cover;
+  object-position: center;
+  margin-bottom: 22px;
+  filter: drop-shadow(0 10px 24px rgba(59, 130, 246, 0.22));
+}
+.auth-intro h1 {
+  margin: 0 0 10px;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+.auth-intro .subtitulo {
+  margin-bottom: 24px;
+  font-size: 15px;
+}
+.auth-destaques {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.destaque {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+.destaque-icone {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.destaque-icone svg {
+  width: 18px;
+  height: 18px;
+}
+

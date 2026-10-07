@@ -1,0 +1,130 @@
+/* A dashboard do prestador é a única tela pensada para caber em "uma
+   tela só" (ver .dashboard-prestador mais abaixo). Restringimos o
+   overflow:hidden a esse caso específico — quando é a tela do cliente
+   (ou qualquer outra) que está visível dentro de <main>, a página
+   volta a rolar normalmente, senão conteúdo mais alto que a viewport
+   (formulário + chamado + mapa + histórico) ficaria cortado sem aviso. */
+main:has(#tela-prestador:not(.oculta)) {
+  height: 100%;
+  overflow: hidden;
+}
+
+h1, h2, h3 {
+  font-family: var(--fonte-titulo);
+  letter-spacing: -0.01em;
+}
+
+/* Classe usada em JS (app.js) para esconder elementos por completo,
+   sem deixar "buraco" no layout — equivalente a display:none. */
+.oculto,
+.oculta {
+  display: none !important;
+}
+
+/* Entrada suave sempre que uma tela deixa de estar oculta — dispara
+   sozinha porque o navegador reinicia animações ao sair de
+   display:none, sem precisar de nenhuma mudança no JS. */
+.tela:not(.oculta) {
+  animation: tela-entrada 280ms ease;
+}
+@keyframes tela-entrada {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animação uniforme para as telas e seus blocos principais criados no
+   dashboard e formulários — dá uma entrada mais "premium" sem forçar
+   movimento excessivo em cada item. */
+.tela:not(.oculta) .cartao,
+.tela:not(.oculta) .dash-card,
+.tela:not(.oculta) .status-banner,
+.tela:not(.oculta) .lista-chamados .item-chamado,
+.tela:not(.oculta) .lista-historico .item-historico {
+  animation: bloco-entrada 320ms var(--ease-suave) both;
+}
+
+.tela:not(.oculta) .lista-chamados .item-chamado:nth-child(2) { animation-delay: 30ms; }
+.tela:not(.oculta) .lista-chamados .item-chamado:nth-child(3) { animation-delay: 60ms; }
+.tela:not(.oculta) .lista-chamados .item-chamado:nth-child(4) { animation-delay: 90ms; }
+.tela:not(.oculta) .lista-historico .item-historico:nth-child(2) { animation-delay: 30ms; }
+.tela:not(.oculta) .lista-historico .item-historico:nth-child(3) { animation-delay: 60ms; }
+.tela:not(.oculta) .lista-historico .item-historico:nth-child(4) { animation-delay: 90ms; }
+
+@keyframes bloco-entrada {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Troca "Entrar <-> Criar conta" e "Sou cliente <-> Sou prestador": o JS
+   (Anim.altura em animacoes.js) anima a ALTURA do card e aplica .entrando
+   no que aparece; os campos sobem 8px com opacidade, em cascata curta.
+   .saindo-campo faz o conteúdo antigo sumir antes da troca. */
+.formulario.entrando > * {
+  animation: campo-entrada 340ms var(--ease-suave) both;
+  animation-delay: calc(var(--i, 0) * 30ms);
+}
+.entrando:not(.formulario) {
+  animation: campo-entrada 340ms var(--ease-suave) both;
+}
+@keyframes campo-entrada {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.saindo-campo {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 150ms ease, transform 150ms ease;
+  pointer-events: none;
+}
+/* Linha azul da marca varre o topo do card a cada troca de modo. */
+.cartao-auth { position: relative; }
+.cartao-auth.trocando::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--linha-marca);
+  transform-origin: left;
+  animation: linha-marca 520ms var(--ease-suave) both;
+}
+@keyframes linha-marca {
+  0% { transform: scaleX(0); opacity: 1; }
+  70% { transform: scaleX(1); opacity: 1; }
+  100% { transform: scaleX(1); opacity: 0; }
+}
+
+/* Saída de tela/modal (usada por Anim.sair). */
+.tela.saindo:not(.oculta) {
+  animation: tela-saida 150ms ease forwards;
+  pointer-events: none;
+}
+@keyframes tela-saida {
+  to { opacity: 0; transform: translateY(-4px); }
+}
+.modal.saindo { animation: modal-fundo-saida 160ms ease forwards; pointer-events: none; }
+.modal.saindo .modal-conteudo { animation: modal-saida 160ms ease forwards; }
+@keyframes modal-fundo-saida { to { opacity: 0; } }
+@keyframes modal-saida { to { opacity: 0; transform: translateY(6px) scale(0.98); } }
+
+/* Telas auxiliares: o card entra sutil (fade + 8px + escala 0.98). */
+.tela-aux:not(.oculta) { animation: none; }
+.tela-aux:not(.oculta) .conteudo > * {
+  animation: aux-entrada 380ms var(--ease-suave) both;
+}
+@keyframes aux-entrada {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+

@@ -1,0 +1,210 @@
+/* =================================================================
+   Login com Google · popup de perfil · Central de Notificações ·
+   card informativo · ordenação · raio de atendimento
+   (usa só os tokens do tema: acompanha o modo claro/escuro)
+   ================================================================= */
+
+/* ---- Login com Google ---- */
+.google-area { margin-top: 18px; }
+.divisor-ou {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-bottom: 14px;
+}
+.divisor-ou::before,
+.divisor-ou::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.google-botao {
+  display: flex;
+  justify-content: center;
+  min-height: 44px;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.google-botao iframe,
+.google-botao > div {
+  border-radius: 999px !important;
+  overflow: hidden;
+}
+.google-aviso { text-align: center; margin: 10px 0 0; }
+
+/* ---- Campo com unidade (raio em km) ---- */
+.campo-com-unidade { position: relative; display: block; }
+.campo-com-unidade input { padding-right: 44px; }
+.campo-unidade {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+/* ---- Ordenação ---- */
+.card-header-chamados { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.ordenar-controle { display: inline-flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-secondary); margin: 0; }
+.ordenar-controle select { width: auto; min-width: 0; max-width: 100%; }
+
+/* ---- Card informativo (componente reutilizável) ---- */
+.cartao-info-area:empty { display: none; }
+.cartao-info-area { margin-bottom: 14px; }
+.cartao-info {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 40px 12px 14px;
+  background: var(--primary-soft);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--primary-dark);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  color: var(--text-primary);
+  animation: cartao-info-entra var(--dur) var(--ease-suave) both;
+}
+.cartao-info-aviso { border-left-color: var(--error); background: var(--error-soft); }
+.cartao-info-icone { flex: 0 0 auto; width: 22px; height: 22px; color: var(--primary-dark); margin-top: 1px; }
+.cartao-info-aviso .cartao-info-icone { color: var(--error); }
+.cartao-info-icone svg { width: 100%; height: 100%; display: block; }
+.cartao-info-corpo { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.cartao-info-titulo { font-size: 0.95rem; }
+.cartao-info-descricao { margin: 0; font-size: 0.9rem; color: var(--text-secondary); overflow-wrap: anywhere; }
+.cartao-info-complemento { font-size: 0.78rem; color: var(--text-muted); overflow-wrap: anywhere; }
+.cartao-info-acoes { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; margin-top: 8px; }
+.cartao-info-fechar {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.cartao-info-fechar:hover { background: var(--background-secondary); }
+.cartao-info-fechar:focus-visible { outline: 2px solid var(--primary-dark); outline-offset: 1px; }
+.cartao-info-saindo { animation: cartao-info-sai 180ms ease forwards; }
+@keyframes cartao-info-entra { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+@keyframes cartao-info-sai { to { opacity: 0; transform: translateY(-6px); } }
+
+/* ---- Central de Notificações (sino + contador + painel) ---- */
+.notificacoes { position: relative; }
+.botao-notificacoes { position: relative; }
+.contador-notificacoes {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: var(--error);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+  box-shadow: 0 0 0 2px var(--surface);
+}
+.painel-notificacoes {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  width: min(360px, calc(100vw - 24px));
+  max-height: min(70vh, 460px);
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-xl);
+  z-index: 60;
+  overflow: hidden;
+  animation: cartao-info-entra var(--dur) var(--ease-suave) both;
+}
+.painel-notificacoes-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.painel-notificacoes-topo .botao-link:disabled { opacity: 0.45; cursor: default; }
+.lista-notificacoes { list-style: none; margin: 0; padding: 0; overflow-y: auto; }
+.item-notificacao {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 11px 14px 11px 18px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  text-align: left;
+  font: inherit;
+  font-size: 0.88rem;
+  cursor: pointer;
+  position: relative;
+}
+.item-notificacao:hover { background: var(--background-secondary); }
+.item-notificacao:focus-visible { outline: 2px solid var(--primary-dark); outline-offset: -2px; }
+.item-notificacao small { color: var(--text-muted); font-size: 0.74rem; }
+.item-notificacao.nao-lida { color: var(--text-primary); font-weight: 600; background: var(--primary-soft); }
+.item-notificacao.nao-lida::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 17px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--primary-dark);
+}
+.item-notificacao-texto { overflow-wrap: anywhere; }
+.notificacoes-vazio { margin: 0; padding: 22px 14px; text-align: center; color: var(--text-muted); font-size: 0.88rem; }
+
+/* Celular: o painel ocupa a largura da tela, abaixo da barra do topo */
+@media (max-width: 600px) {
+  .painel-notificacoes {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    top: 64px;
+    width: auto;
+    max-height: calc(100vh - 80px);
+  }
+  .ordenar-controle { width: 100%; justify-content: space-between; }
+  .ordenar-controle select { flex: 1; }
+  .cartao-info { padding-right: 36px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cartao-info, .painel-notificacoes, .cartao-info-saindo { animation: none; }
+}
+
+
+/* ---------- Tela de login: título e linha "Esqueceu a senha? / Criar conta" ---------- */
+.titulo-auth {
+  margin: 4px 0 18px;
+  font-size: 22px;
+  text-align: center;
+}
+.auth-links {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* "Criar conta" à esquerda, "Esqueceu sua senha?" à direita */
+  gap: 12px;
+  margin-top: 2px;
+}
+.auth-links-centro { justify-content: center; }
+

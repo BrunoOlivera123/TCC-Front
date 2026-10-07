@@ -1,0 +1,658 @@
+/* ================================================================
+   DASHBOARD DO PRESTADOR — Layout 100vh, grid 2x2
+   Ativa APENAS na seção #tela-prestador (não afeta outras telas).
+   Prioridade: desktop (1366px+), sem scroll vertical.
+================================================================ */
+
+
+#tela-prestador {
+  /* Ocupa 100% da altura disponível (viewport - header) */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* impede scroll na dashboard principal */
+}
+
+/* Cabeçalho: Saudação + Status (horizontal, compacto) */
+.dash-cabecalho {
+  width: min(100%, 1280px);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 0 14px;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  flex-shrink: 0; /* não encolhe quando há espaço limitado */
+}
+
+.dash-status-rapido {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  box-shadow: none;
+  transition: background-color var(--dur) ease, color var(--dur) ease;
+}
+/* Classe alternada via JS (app.js, atualizarBadgeDisponivel) — o seletor
+   antigo baseado em "~" nunca funcionou porque o checkbox e o badge
+   ficam em ramos diferentes do DOM (não são irmãos). */
+.status-badge.status-badge-ativo {
+  color: #FFFFFF;
+  background: var(--success);
+}
+
+/* Grid principal: coluna esquerda com 3 células empilhadas (Status,
+   Avaliações, Histórico) e a coluna de Chamados ocupando a altura
+   inteira ao lado — sem sobrepor células (ver observação abaixo). */
+.dash-grid {
+  flex: 1; /* expande para preencher o espaço restante */
+  display: grid;
+  grid-template-columns: 1fr 1.2fr; /* col 1 mais estreita, col 2 (chamados) maior destaque */
+  grid-template-rows: auto auto 1fr; /* Status e Avaliações do tamanho do conteúdo; Histórico ocupa o resto */
+  gap: 20px;
+  padding: 20px 28px;
+  overflow: hidden; /* impede scroll no grid */
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Cada célula do grid é um card */
+.dash-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden; /* contém scroll caso haja conteúdo demais */
+}
+
+.dash-card:hover {
+  box-shadow: var(--shadow-md);
+  transition: box-shadow var(--dur) ease;
+}
+
+/* Célula STATUS: compacta, sem scroll */
+.dash-card-status {
+  grid-row: 1;
+  grid-column: 1;
+}
+
+.card-header-compacto h3 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.card-conteudo-status {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card-conteudo-status .interruptor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.card-conteudo-status .texto-auxiliar {
+  font-size: 12px;
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.card-conteudo-status .botao-pequeno {
+  align-self: flex-start;
+  padding: 8px 14px;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-conteudo-status svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Célula CHAMADOS: destaque visual maior, ocupa as 3 linhas da coluna 1 */
+.dash-card-chamados {
+  grid-row: 1 / 4;
+  grid-column: 2;
+  border: 2px solid var(--primary);
+  background: linear-gradient(135deg, var(--surface) 0%, var(--primary-soft) 100%);
+}
+
+.card-header h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.card-conteudo-chamados {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  gap: 12px;
+}
+.card-conteudo-chamados::-webkit-scrollbar {
+  display: none;
+}
+
+.item-chamado-meta {
+  color: var(--text-secondary);
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.bloco-chamados {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.estado-vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.estado-vazio-icone {
+  width: 48px;
+  height: 48px;
+  opacity: 0.5;
+  margin: 0;
+}
+
+.estado-vazio span {
+  display: block;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.estado-vazio small {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.lista-chamados {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lista-chamados .item-chamado {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 12px 10px;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all var(--dur) ease;
+  order: -1;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 150px;
+  justify-content: space-between;
+}
+
+.lista-chamados .item-chamado-info {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-height: 94px;
+  justify-content: space-between;
+}
+
+.lista-chamados .item-chamado strong,
+.lista-chamados .item-chamado .item-chamado-categoria,
+.lista-chamados .item-chamado .item-chamado-descricao,
+.lista-chamados .item-chamado .item-chamado-meta {
+  display: block;
+  width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.35;
+}
+
+.lista-chamados .item-chamado strong {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.lista-chamados .item-chamado .item-chamado-categoria {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--primary-light);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.lista-chamados .item-chamado .item-chamado-descricao,
+.lista-chamados .item-chamado .item-chamado-meta {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.lista-chamados .item-chamado .item-chamado-descricao {
+  min-height: 2.7em;
+  display: -webkit-box;
+  /* -webkit-line-clamp: 2; */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.lista-chamados .item-chamado .item-chamado-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.lista-chamados .item-chamado .botao-primario {
+  width: 100%;
+  min-height: 38px;
+  align-self: stretch;
+  white-space: nowrap;
+  font-size: 13px;
+  padding: 8px 12px;
+}
+
+.lista-chamados .item-chamado:hover {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+  transform: translateX(4px);
+}
+
+/* Célula AVALIAÇÕES: resumo compacto */
+.dash-card-avaliacoes {
+  grid-row: 2;
+  grid-column: 1;
+}
+.card-conteudo-avaliacoes {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.avaliacao-resumo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.avaliacao-resumo strong {
+  font-size: 20px;
+  color: var(--primary);
+}
+
+/* Célula HISTÓRICO: últimos 3-4, ocupa o restante da coluna esquerda */
+.dash-card-historico {
+  grid-row: 3;
+  grid-column: 1;
+  min-height: 0; /* permite que o overflow-y interno (abaixo) funcione dentro do fr restante */
+}
+
+/* O botão "Ver histórico completo" precisa ficar SEMPRE visível, fora
+   da área de scroll — só a lista interna rola quando tem muito
+   conteúdo (ver seção "Histórico" do pedido de ajustes visuais). */
+.card-conteudo-historico {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+  max-height: 300px;
+}
+
+.lista-historico-compacta {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  min-height: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.lista-historico-compacta::-webkit-scrollbar {
+  display: none;
+}
+
+.card-conteudo-historico .botao-link-modal {
+  flex: none;
+}
+
+.lista-historico-compacta .item-historico {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  gap: 10px;
+}
+
+.lista-historico-compacta .item-historico strong {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.lista-historico-compacta .item-historico .texto-auxiliar {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+}
+
+.lista-historico-compacta .item-historico:last-child {
+  border-bottom: none;
+}
+
+/* Botões "Ver mais" dentro dos cards */
+.botao-link-modal {
+  background: none;
+  border: none;
+  color: var(--primary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 0;
+  margin-top: auto; /* fica ao final do card */
+  text-align: left;
+  transition: color var(--dur) ease;
+}
+
+.botao-link-modal:hover {
+  color: var(--primary-dark);
+}
+
+/* Estilos dos MODAIS (chamado em andamento, avaliações, histórico) */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(30, 41, 59, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2147483647;
+  opacity: 1;
+  transition: opacity var(--dur) ease;
+  padding: 20px;
+}
+
+.modal.oculto {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.modal-conteudo {
+  background: var(--surface);
+  border-radius: 20px;
+  box-shadow: var(--shadow-xl);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 28px;
+  position: relative;
+  z-index: 1;
+  animation: modalEntrar var(--dur) ease;
+}
+.modal-conteudo::-webkit-scrollbar {
+  display: none;
+}
+
+.modal-conteudo.modal-grande {
+  max-width: 800px;
+}
+
+@keyframes modalEntrar {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-conteudo h2 {
+  margin: 0 0 16px 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.modal-fechar {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: var(--background);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  color: var(--text-secondary);
+  transition: all var(--dur) ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-fechar:hover {
+  background: var(--border);
+  color: var(--text-primary);
+}
+
+.modal-corpo {
+  margin-bottom: 20px;
+}
+
+.modal-acoes {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-acoes button {
+  flex: 1;
+}
+
+/* Responsividade para tablets e monitores menores */
+@media (max-width: 1200px) {
+  .dash-grid {
+    grid-template-columns: 1fr 1.1fr;
+    grid-template-rows: auto auto auto auto;
+    gap: 16px;
+    padding: 16px 20px;
+  }
+
+  .dash-card-chamados {
+    grid-row: 2;
+    grid-column: 1 / 3;
+  }
+
+  .dash-card-avaliacoes {
+    grid-row: 3;
+    grid-column: 1;
+  }
+
+  .dash-card-historico {
+    grid-row: 3;
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 900px) {
+  #tela-prestador {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+
+  .dash-cabecalho {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 18px;
+  }
+
+  .dash-status-rapido {
+    width: 100%;
+    justify-content: space-between;
+    margin-left: 0;
+  }
+
+  .dash-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 16px;
+    padding: 16px 18px 64px;
+    max-width: none;
+  }
+
+  .dash-card-status,
+  .dash-card-chamados,
+  .dash-card-avaliacoes,
+  .dash-card-historico {
+    grid-row: auto;
+    grid-column: auto;
+  }
+
+  .dash-card-chamados {
+    grid-row: 2;
+    grid-column: 1;
+    min-height: 380px;
+  }
+
+  .modal-conteudo {
+    max-height: 80vh;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .dash-cabecalho {
+    padding: 14px 14px 12px;
+  }
+
+  .dash-status-rapido {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .status-badge {
+    width: auto;
+    font-size: 12px;
+    padding: 7px 10px;
+  }
+
+  .dash-grid {
+    gap: 14px;
+    padding: 14px 12px 56px;
+  }
+
+  .dash-card {
+    padding: 16px;
+  }
+
+  .card-header h3,
+  .card-header-compacto h3 {
+    margin-bottom: 12px;
+    font-size: 16px;
+  }
+
+  .card-conteudo-status {
+    gap: 10px;
+  }
+
+  .modal {
+    padding: 12px;
+  }
+
+  .modal-conteudo {
+    width: min(100%, 100%);
+    max-height: 84vh;
+    padding: 18px 16px 16px;
+    border-radius: 16px;
+  }
+
+  .modal-acoes {
+    flex-direction: column;
+  }
+
+  .modal-acoes button {
+    width: 100%;
+    flex: 1 1 auto;
+  }
+
+  .lista-chamados .item-chamado {
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .lista-chamados .item-chamado .item-chamado-meta {
+    flex-wrap: wrap;
+  }
+
+  .lista-chamados .item-chamado .botao-primario {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .botao-link-modal {
+    align-self: stretch;
+    text-align: center;
+  }
+}
+

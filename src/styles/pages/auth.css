@@ -1,0 +1,35 @@
+/* =================================================================
+   Tela de acesso: destaque (chip, botões, indicadores e exemplo)
+   ================================================================= */
+.ic { width: 22px; height: 22px; flex: none; }
+.lp-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; background: var(--background-secondary); border: 1px solid var(--border); color: var(--text-secondary); font-size: 13px; font-weight: 600; }
+.lp-chip .ic { width: 16px; height: 16px; color: var(--primary); }
+.auth-intro h1 { margin-top: 14px; }
+.lp-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin: 22px 0 18px; }
+.lp-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 24px; border-radius: 12px; font: inherit; font-weight: 700; text-decoration: none; background: var(--primary); color: #1b1606; border: 1px solid transparent; box-shadow: var(--shadow-sm); transition: transform var(--dur) ease, box-shadow var(--dur) ease; }
+.lp-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.lp-btn.sec { background: var(--surface); color: var(--text-primary); border-color: var(--border); box-shadow: none; }
+.lp-btn:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
+.lp-trust { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; color: var(--text-secondary); }
+.lp-trust li { display: flex; align-items: flex-start; gap: 10px; }
+.lp-trust .ic { width: 20px; height: 20px; color: var(--success); margin-top: 1px; }
+.lp-mock { margin: 26px 0 0; padding: 16px 18px; max-width: 460px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow-md); }
+.lp-mock figcaption { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+.lp-mock ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.lp-mock li { display: flex; gap: 12px; align-items: center; opacity: .55; }
+.lp-mock li.ok { opacity: 1; }
+.lp-mock li > span { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--background-secondary); border: 1px solid var(--border); }
+.lp-mock li.ok > span { background: var(--primary); color: #1b1606; border-color: transparent; }
+.lp-mock .ic { width: 18px; height: 18px; }
+.lp-mock b { display: block; font-size: 14px; }
+.lp-mock small { color: var(--text-secondary); }
+.lp-mock li.ok:nth-child(2) > span { animation: lp-pulso 2s ease-in-out infinite; }
+@keyframes lp-pulso { 50% { transform: scale(1.1); } }
+@media (max-width: 640px) { .lp-ctas .lp-btn { flex: 1 1 100%; } }
+@media (prefers-reduced-motion: reduce) {
+  .lp-btn { transition: none; }
+  .lp-btn:hover { transform: none; }
+  .lp-mock li.ok:nth-child(2) > span { animation: none; }
+}
+
+

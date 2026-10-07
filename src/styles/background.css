@@ -1,0 +1,27 @@
+/* =================================================================
+   Fundo padrão de TODAS as telas
+   Base lisa + grade de pontos que se dissolve para baixo + uma luz suave no
+   topo. Fica numa camada fixa atrás de tudo (não rola nem pesa) e usa só
+   variáveis de tema, então claro e escuro seguem o mesmo padrão.
+   ================================================================= */
+:root {
+  --fundo-ponto: rgba(15, 39, 71, 0.13);
+  --fundo-luz: color-mix(in srgb, var(--primary) 14%, transparent);
+}
+:root[data-tema='escuro'] {
+  --fundo-ponto: rgba(242, 239, 233, 0.09);
+  --fundo-luz: color-mix(in srgb, var(--primary) 9%, transparent);
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 42% at 50% 0%, var(--fundo-luz), transparent 72%),
+    radial-gradient(circle, var(--fundo-ponto) 1px, transparent 1.4px) 0 0 / 24px 24px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.55) 45%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.55) 45%, transparent 100%);
+}
+

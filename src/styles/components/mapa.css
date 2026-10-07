@@ -1,0 +1,102 @@
+/* ---------- Mapa (Leaflet + OpenStreetMap) ---------- */
+.mapa-caixa {
+  position: relative;
+  height: 220px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  margin-bottom: 16px;
+  background: var(--background);
+}
+html.mapa-fullscreen,
+body.mapa-fullscreen {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.mapa-caixa.mapa-fullscreen {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 900;
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+  max-height: none;
+  transform: none;
+}
+.mapa-caixa.mapa-fullscreen .leaflet-container {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100vh;
+  z-index: 1;
+}
+.mapa-caixa.mapa-fullscreen .leaflet-pane,
+.mapa-caixa.mapa-fullscreen .leaflet-top,
+.mapa-caixa.mapa-fullscreen .leaflet-control {
+  z-index: 1;
+}
+.mapa-caixa.mapa-fullscreen .leaflet-popup {
+  z-index: 1100;
+}
+.mapa-caixa.mapa-fullscreen .leaflet-popup-content-wrapper,
+.mapa-caixa.mapa-fullscreen .leaflet-popup-tip {
+  z-index: 1100;
+}
+.mapa-caixa.mapa-fullscreen .mapa-botao-fullscreen {
+  top: 18px;
+  right: 18px;
+  z-index: 1200;
+}
+.mapa-botao-fullscreen {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 500;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--text-primary);
+  padding: 7px 10px;
+  border-radius: 9px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform 150ms ease, box-shadow var(--dur) ease;
+}
+.mapa-botao-fullscreen:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: var(--surface);
+  color: var(--text-primary);
+}
+
+.mapa-icone {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-md);
+  font-size: 18px;
+  line-height: 1;
+  background: #fff;
+}
+
+/* Marcadores do mapa por categoria: tons suaves derivados da própria
+   paleta (azul, cinza, amarelo, verde, vermelho), sem introduzir cores
+   novas ao sistema. */
+.icon-mecanico { background: var(--primary-soft); }
+.icon-borracheiro { background: var(--background-secondary); }
+.icon-auto-eletrica { background: var(--accent-soft); }
+.icon-guincho { background: var(--success-soft); }
+.icon-cliente { background: var(--error-soft); }
+

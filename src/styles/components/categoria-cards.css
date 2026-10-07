@@ -1,0 +1,148 @@
+/* ================================================================
+   SELEÇÃO DE CATEGORIA EM CARDS
+   Usado em: cadastro de prestador, "Tipo de problema" (chamado do
+   cliente) e Configurações. O <select> original continua no DOM
+   (visualmente escondido) para manter o valor do formulário e a
+   compatibilidade com o app.js — os cards apenas espelham e
+   controlam esse <select>.
+================================================================ */
+
+.select-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* As 4 categorias (Mecânico, Borracheiro, Auto Elétrica, Guincho) devem
+   ficar sempre com o mesmo tamanho e, no desktop, juntas na mesma
+   linha — ver seção "Profissões/categorias" do pedido de ajustes
+   visuais. Como o mesmo componente aparece dentro de cartões estreitos
+   (cadastro/configurações, ~480px) e largos (chamado do cliente), usamos
+   4 colunas fixas quando cabe confortavelmente e caímos para 2 (depois 1)
+   nos containers/telas mais estreitos, sem nunca deixar um card maior
+   que outro. */
+.categoria-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+@media (max-width: 640px) {
+  .categoria-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.categoria-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+  min-height: 170px;
+  height: 100%;
+  width: 100%;
+  padding: 16px 14px 14px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: var(--text-primary);
+  box-sizing: border-box;
+  transition: border-color var(--dur) ease, box-shadow var(--dur) ease, transform 150ms ease, background-color var(--dur) ease;
+}
+
+.categoria-card:hover {
+  border-color: var(--categoria-cor, var(--primary-light));
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.categoria-card:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.categoria-card.ativa {
+  border-color: var(--categoria-cor, var(--primary));
+  background: var(--primary-soft);
+  box-shadow: 0 0 0 1px var(--categoria-cor, var(--primary));
+}
+
+.categoria-card-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--categoria-cor, var(--primary));
+  color: #FFFFFF;
+  flex-shrink: 0;
+}
+
+.categoria-card-icone svg {
+  width: 20px;
+  height: 20px;
+}
+
+.categoria-card-nome {
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+  font-family: var(--fonte-titulo);
+  font-size: 14.5px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text-primary);
+}
+
+.categoria-card-desc {
+  display: block;
+  margin-top: auto;
+  min-height: 36px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+.categoria-card-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--categoria-cor, var(--primary));
+  color: #FFFFFF;
+  font-size: 12px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity var(--dur) ease, transform var(--dur) ease;
+}
+
+.categoria-card.ativa .categoria-card-check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Em telas bem estreitas, cards ficam em coluna única para não espremer texto */
+@media (max-width: 400px) {
+  .categoria-cards {
+    grid-template-columns: 1fr;
+  }
+}
+

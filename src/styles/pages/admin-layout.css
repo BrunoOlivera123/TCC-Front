@@ -1,0 +1,18 @@
+/* ================================================================
+   PAINEL ADMIN — aproveitamento horizontal
+   Estatísticas + categorias lado a lado (a tabela de categorias é
+   compacta e não precisa de uma linha própria só para ela).
+================================================================ */
+.admin-linha-superior {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(240px, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .admin-linha-superior {
+    grid-template-columns: 1fr;
+  }
+}
+

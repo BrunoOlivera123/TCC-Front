@@ -1,0 +1,79 @@
+/* ---------- Avaliações do prestador ---------- */
+.avaliacao-resumo {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 14px;
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+.avaliacao-resumo strong {
+  font-size: 20px;
+  color: var(--accent-hover);
+}
+
+/* ---------- Ajuda / FAQ (usa <details>/<summary> nativos) ---------- */
+.faq-item {
+  border-bottom: 1px solid var(--border);
+  padding: 12px 0;
+}
+.faq-item:last-of-type {
+  border-bottom: none;
+}
+.faq-item summary {
+  cursor: pointer;
+  font-weight: 600;
+  list-style: none;
+  color: var(--text-primary);
+}
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+.faq-item summary::before {
+  content: '+';
+  display: inline-block;
+  width: 18px;
+  color: var(--primary);
+  font-weight: 700;
+}
+.faq-item[open] summary::before {
+  content: '−';
+}
+.faq-item p {
+  margin: 10px 0 0 18px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* ---------- Links institucionais no rodapé ---------- */
+.rodape-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+.rodape-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 12.5px;
+  transition: color var(--dur) ease;
+}
+.rodape-links a:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+/* Em telas largas, a tela de autenticação ganha mais respiro: cartão
+   um pouco mais estreito/centralizado e título maior. O layout em
+   duas colunas em si já vem do grid de .auth-layout (ver acima). */
+@media (min-width: 960px) {
+  .conteudo-auth {
+    max-width: 1040px;
+    padding-top: 64px;
+  }
+  .auth-intro h1 {
+    font-size: 34px;
+  }
+}
+
