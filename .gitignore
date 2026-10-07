@@ -2,8 +2,8 @@ node_modules/
 dist/
 
 # Configuracao local e segredos (o frontend nao deveria ter nenhum)
-.env
-.env.*
+# .env
+# .env.*
 !.env.example
 
 *.pem
